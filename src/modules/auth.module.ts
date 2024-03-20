@@ -1,19 +1,25 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AuthController } from "src/controllers/auth.controller";
-import { FirebaseApp } from "src/firebase/firebase.service";
+import { FirebaseService } from "src/firebase/firebase.service";
 import { authSchema } from "src/schema/authSchema";
 import { AuthService } from "src/services/auth.service";
+import { UserService } from "src/services/user.service";
 import { ZodValidationMiddleware } from "src/shared/middlewares/zodValidation";
+import { UserModule } from "./user.module";
 
 @Module({
-  imports: [],
+  imports: [UserModule],
   controllers: [AuthController],
-  providers: [AuthService, FirebaseApp],
+  providers: [AuthService, FirebaseService, UserService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ZodValidationMiddleware(authSchema))
       .forRoutes("/auth/signup");
+
+    consumer
+      .apply(ZodValidationMiddleware(authSchema.omit({ name: true })))
+      .forRoutes("/auth/login");
   }
 }
