@@ -7,7 +7,7 @@ export class UserService {
     .firestore()
     .collection("user");
 
-  public async createUser(name: string) {
-    await this._collectionRef.add({ name: name });
+  public async createUser(user: object) {
+    await this._collectionRef.add(user);
   }
 }

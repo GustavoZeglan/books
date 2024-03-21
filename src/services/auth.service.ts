@@ -28,7 +28,7 @@ export class AuthService {
     );
   }
 
-  async signup(name: string, email: string, password: string): Promise<void> {
+  async signup(name: string, email: string, password: string) {
     await firebaseAuth.createUserWithEmailAndPassword(
       this.clientAuth,
       email,
